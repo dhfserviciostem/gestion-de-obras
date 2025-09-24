@@ -29,62 +29,47 @@ Sistema completo de gestión de obras de construcción con funcionalidades CRUD,
 - MySQL 8.0+
 - NPM o Yarn
 
-## 🚀 Deploy en Render
+## 🚀 Deploy en Railway (Recomendado)
 
-### Opción 1: Deploy Automático con render.yaml
+### Deploy Automático con MySQL
 
 1. **Sube tu código a GitHub**
-2. **Ve a [Render.com](https://render.com)**
-3. **Crea una cuenta o inicia sesión**
-4. **Haz clic en "New +" → "Blueprint"**
-5. **Conecta tu repositorio de GitHub**
-6. **Render detectará automáticamente el archivo `render.yaml`**
-7. **Haz clic en "Apply"**
+2. **Ve a [Railway.app](https://railway.app)**
+3. **Crea una cuenta o inicia sesión con GitHub**
+4. **Haz clic en "New Project"**
+5. **Selecciona "Deploy from GitHub repo"**
+6. **Conecta tu repositorio de GitHub**
+7. **Railway detectará automáticamente que es un proyecto Node.js**
 
-### Opción 2: Deploy Manual
+### 🗄️ Configurar Base de Datos MySQL en Railway
 
-1. **Ve a [Render.com](https://render.com)**
-2. **Haz clic en "New +" → "Web Service"**
-3. **Conecta tu repositorio de GitHub**
-4. **Configura el servicio:**
-   - **Name**: `construction-management-system`
-   - **Environment**: `Node`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Plan**: `Free`
-
-5. **Configura las variables de entorno:**
-   ```
-   NODE_ENV=production
-   PORT=3000
-   DB_HOST=[Host de tu base de datos]
-   DB_USER=[Usuario de la base de datos]
-   DB_PASSWORD=[Contraseña de la base de datos]
-   DB_NAME=construction_management
-   DB_PORT=3306
-   SESSION_SECRET=[Clave secreta generada]
-   UPLOAD_PATH=./public/uploads
-   MAX_FILE_SIZE=10485760
-   CORS_ORIGIN=https://tu-app.onrender.com
-   ```
-
-### 🗄️ Configurar Base de Datos en Render
-
-1. **Haz clic en "New +" → "PostgreSQL"**
-2. **Configura la base de datos:**
-   - **Name**: `construction-db`
-   - **Database**: `construction_management`
-   - **User**: `construction_user`
-   - **Plan**: `Free`
-
-3. **Copia las credenciales de conexión**
-4. **Actualiza las variables de entorno en tu servicio web**
+1. **En tu proyecto, haz clic en "New"**
+2. **Selecciona "Database" → "MySQL"**
+3. **Railway creará automáticamente una base de datos MySQL**
+4. **Copia las variables de entorno que Railway genera**
 
 ### 📊 Inicializar la Base de Datos
 
-1. **Conecta a tu base de datos PostgreSQL en Render**
+1. **Conecta a tu base de datos MySQL en Railway**
 2. **Ejecuta el script SQL desde `database/schema.sql`**
 3. **Inserta datos de prueba desde `database/sample-data.sql`**
+
+### Variables de Entorno en Railway
+
+Railway configurará automáticamente estas variables:
+```
+NODE_ENV=production
+PORT=3000
+DB_HOST=[Host de Railway]
+DB_USER=[Usuario de Railway]
+DB_PASSWORD=[Contraseña de Railway]
+DB_NAME=[Nombre de la base de datos]
+DB_PORT=3306
+SESSION_SECRET=[Genera una clave secreta]
+UPLOAD_PATH=./public/uploads
+MAX_FILE_SIZE=10485760
+CORS_ORIGIN=https://tu-app.railway.app
+```
 
 ## 🔧 Instalación Local
 
