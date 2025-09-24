@@ -44,3 +44,4 @@ databases:
     plan: free
     databaseName: construction_management
     user: construction_user
+    engine: mysql

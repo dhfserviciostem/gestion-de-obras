@@ -70,7 +70,7 @@ Sistema completo de gestión de obras de construcción con funcionalidades CRUD,
 
 ### 🗄️ Configurar Base de Datos en Render
 
-1. **Haz clic en "New +" → "PostgreSQL"**
+1. **Haz clic en "New +" → "MySQL"**
 2. **Configura la base de datos:**
    - **Name**: `construction-db`
    - **Database**: `construction_management`
@@ -82,7 +82,7 @@ Sistema completo de gestión de obras de construcción con funcionalidades CRUD,
 
 ### 📊 Inicializar la Base de Datos
 
-1. **Conecta a tu base de datos PostgreSQL en Render**
+1. **Conecta a tu base de datos MySQL en Render**
 2. **Ejecuta el script SQL desde `database/schema.sql`**
 3. **Inserta datos de prueba desde `database/sample-data.sql`**
 
