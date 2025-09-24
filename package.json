@@ -10,7 +10,7 @@
     "postinstall": "echo 'Dependencies installed successfully'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["construction", "management", "crud", "nodejs", "mysql"],
+  "keywords": ["construction", "management", "crud", "nodejs", "mysql", "railway"],
   "author": "Construction Management Team",
   "license": "MIT",
   "dependencies": {
