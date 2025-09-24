@@ -26,9 +26,14 @@ const dbConfig = {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'admin123456',
     database: process.env.DB_NAME || 'construction_management',
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    acquireTimeout: 60000,
+    timeout: 60000,
+    reconnect: true
 };
 
 const pool = mysql.createPool(dbConfig);
@@ -40,17 +45,40 @@ async function testConnection() {
             await pool.execute('SELECT 1');
             console.log('✅ Database connected successfully');
             
-            // Check if we have any activities, if not, insert some basic ones
-            const [activities] = await pool.execute('SELECT COUNT(*) as count FROM activities');
-            if (activities[0].count === 0) {
-                console.log('📝 No activities found, inserting sample data...');
+            // Check if users table exists, if not, create it
+            try {
+                const [users] = await pool.execute('SELECT COUNT(*) as count FROM users');
+                if (users[0].count === 0) {
+                    console.log('📝 No users found, inserting admin user...');
+                    await pool.execute(`
+                        INSERT INTO users (username, email, password_hash, first_name, last_name, role) VALUES
+                        ('admin', 'admin@admin.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'Sistema', 'admin')
+                    `);
+                }
+            } catch (error) {
+                console.log('📝 Users table not found, creating basic structure...');
+                // Create users table if it doesn't exist
                 await pool.execute(`
-                    INSERT IGNORE INTO activities (title, description, status, priority, project_id, assigned_to, created_by, start_date, due_date) VALUES
-                    ('Preparación del terreno', 'Limpieza y nivelación del terreno para construcción', 'completed', 'high', 1, 2, 1, '2024-01-15', '2024-01-20'),
-                    ('Cimentación', 'Excavación y construcción de cimientos', 'in_progress', 'critical', 1, 3, 1, '2024-01-21', '2024-02-10'),
-                    ('Estructura metálica', 'Montaje de estructura de acero', 'pending', 'high', 1, 2, 1, '2024-02-11', '2024-03-15')
+                    CREATE TABLE IF NOT EXISTS users (
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        username VARCHAR(50) UNIQUE NOT NULL,
+                        email VARCHAR(100) UNIQUE NOT NULL,
+                        password_hash VARCHAR(255) NOT NULL,
+                        first_name VARCHAR(50) NOT NULL,
+                        last_name VARCHAR(50) NOT NULL,
+                        role ENUM('admin', 'manager', 'supervisor', 'worker') DEFAULT 'worker',
+                        phone VARCHAR(20),
+                        is_active BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    )
                 `);
-                console.log('✅ Sample activities inserted');
+                
+                // Insert admin user
+                await pool.execute(`
+                    INSERT INTO users (username, email, password_hash, first_name, last_name, role) VALUES
+                    ('admin', 'admin@admin.com', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrador', 'Sistema', 'admin')
+                `);
             }
         }
     } catch (error) {
