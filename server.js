@@ -112,12 +112,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: false, // Railway doesn't require HTTPS for sessions
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    },
-    // Use memory store for development, but this should be changed for production
-    store: process.env.NODE_ENV === 'production' ? undefined : undefined
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'lax' // Allow cross-site requests
+    }
 }));
 
 // Static files
