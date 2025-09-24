@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Proyectos</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="loginModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content login-modal-content">
+                <div class="row g-0">
+                    <!-- Left side - Background Image -->
+                    <div class="col-md-6 login-background">
+                        <div class="login-overlay">
+                            <div class="login-brand">
+                                <div class="brand-logo">
+                                    <img src="images/logo2.png" alt="SGP Logo" height="100">
+                </div>
+                                <h2 class="brand-title">SGP</h2>
+                                <p class="brand-subtitle">Sistema de Gestión de Proyectos</p>
+                                <div class="brand-features">
+                                    <div class="feature-item">
+                                        <i class="bi bi-check-circle"></i>
+                                        <span>Gestión de Obras</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-check-circle"></i>
+                                        <span>Control de Presupuestos</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-check-circle"></i>
+                                        <span>Seguimiento de Actividades</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side - Login Form -->
+                    <div class="col-md-6">
+                        <div class="login-form-container">
+                            <div class="login-form-header">
+                                <h4 class="login-title">
+                                    <i class="bi bi-shield-lock text-primary me-2"></i>
+                                    Iniciar Sesión
+                                </h4>
+                                <p class="login-subtitle">Accede a tu cuenta para continuar</p>
+                            </div>
+                            
+                            <form id="loginForm" class="login-form">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        <input type="text" class="form-control" id="username" placeholder="Ingresa tu usuario" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña" required>
+                            </div>
+                        </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">
+                                        Recordar sesión
+                                    </label>
+                                </div>
+                        <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-login">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i> 
+                                        Ingresar al Sistema
+                            </button>
+                        </div>
+                    </form>
+                            
+                    <div id="loginError" class="alert alert-danger mt-3 d-none"></div>
+                            
+                            <div class="login-footer">
+                                <small class="text-muted">
+                                    <i class="bi bi-shield-check me-1"></i>
+                                    Conexión segura y encriptada
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editFirstName" class="form-label">Nombre *</label>
+                            <input type="text" class="form-control" id="editFirstName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLastName" class="form-label">Apellido *</label>
+                            <input type="text" class="form-control" id="editLastName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="editPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Nueva Contraseña (opcional)</label>
+                            <input type="password" class="form-control" id="editPassword">
+                            <small class="text-muted">Dejar vacío para mantener la contraseña actual</small>
+                        </div>
+                    </form>
+                    <div id="editProfileError" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="editProfileForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Activity Modal -->
+    <div class="modal fade" id="editActivityModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editActivityForm">
+                        <input type="hidden" id="editActivityId">
+                        <div class="mb-3">
+                            <label for="editActivityTitle" class="form-label">Título *</label>
+                            <input type="text" class="form-control" id="editActivityTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editActivityDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="editActivityDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editActivityProject" class="form-label">Obra</label>
+                                    <select class="form-select" id="editActivityProject">
+                                        <option value="">Seleccionar obra...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editActivityAssigned" class="form-label">Asignado a</label>
+                                    <select class="form-select" id="editActivityAssigned">
+                                        <option value="">Seleccionar usuario...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editActivityStatus" class="form-label">Estado</label>
+                                    <select class="form-select" id="editActivityStatus">
+                                        <option value="pending">Pendiente</option>
+                                        <option value="in_progress">En Progreso</option>
+                                        <option value="completed">Completado</option>
+                                        <option value="cancelled">Cancelado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editActivityPriority" class="form-label">Prioridad</label>
+                                    <select class="form-select" id="editActivityPriority">
+                                        <option value="low">Baja</option>
+                                        <option value="medium">Media</option>
+                                        <option value="high">Alta</option>
+                                        <option value="critical">Crítica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editActivityDueDate" class="form-label">Fecha Límite</label>
+                                    <input type="date" class="form-control" id="editActivityDueDate">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="editActivityError" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="editActivityForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div class="modal fade" id="editClientModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editClientForm">
+                        <input type="hidden" id="editClientId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editClientName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="editClientName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editClientCompany" class="form-label">Empresa</label>
+                                    <input type="text" class="form-control" id="editClientCompany">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editClientEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="editClientEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editClientPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="editClientPhone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editClientAddress" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="editClientAddress">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editClientCity" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="editClientCity">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editClientState" class="form-label">Provincia</label>
+                                    <input type="text" class="form-control" id="editClientState">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="editClientPostalCode" class="form-label">Código Postal</label>
+                                    <input type="text" class="form-control" id="editClientPostalCode">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="editClientError" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="editClientForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Supplier Modal -->
+    <div class="modal fade" id="editSupplierModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Proveedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editSupplierForm">
+                        <input type="hidden" id="editSupplierId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="editSupplierName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierCompany" class="form-label">Empresa *</label>
+                                    <input type="text" class="form-control" id="editSupplierCompany" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="editSupplierEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="editSupplierPhone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierType" class="form-label">Tipo de Proveedor</label>
+                                    <select class="form-select" id="editSupplierType">
+                                        <option value="materials">Materiales</option>
+                                        <option value="equipment">Equipamiento</option>
+                                        <option value="services">Servicios</option>
+                                        <option value="labor">Mano de Obra</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editSupplierPaymentTerms" class="form-label">Términos de Pago</label>
+                                    <input type="text" class="form-control" id="editSupplierPaymentTerms">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="editSupplierError" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="editSupplierForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editUserFirstName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="editUserFirstName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editUserLastName" class="form-label">Apellido *</label>
+                                    <input type="text" class="form-control" id="editUserLastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserUsername" class="form-label">Usuario *</label>
+                            <input type="text" class="form-control" id="editUserUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserEmail" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="editUserEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserPhone" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="editUserPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserRole" class="form-label">Rol *</label>
+                            <select class="form-select" id="editUserRole" required>
+                                <option value="admin">Administrador</option>
+                                <option value="manager">Gerente</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="worker">Trabajador</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUserPassword" class="form-label">Nueva Contraseña (opcional)</label>
+                            <input type="password" class="form-control" id="editUserPassword">
+                            <small class="text-muted">Dejar vacío para mantener la contraseña actual</small>
+                        </div>
+                    </form>
+                    <div id="editUserError" class="alert alert-danger d-none"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="editUserForm" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="d-none">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-building"></i> SGP - Sistema de Gestión de Proyectos
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-section="dashboard">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="projects">
+                                <i class="bi bi-building"></i> Obras
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="activities">
+                                <i class="bi bi-list-task"></i> Actividades
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="clients">
+                                <i class="bi bi-people"></i> Clientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="suppliers">
+                                <i class="bi bi-truck"></i> Proveedores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="files">
+                                <i class="bi bi-folder"></i> Archivos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-section="users">
+                                <i class="bi bi-person-gear"></i> Usuarios
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> <span id="currentUserName"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" id="profileLink">
+                                    <i class="bi bi-person"></i> Mi Perfil
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                                </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container-fluid">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="content-section">
+                    <!-- Hero Section -->
+                    <!-- Hero Section - Compact -->
+                    <div class="hero-section-compact mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8">
+                                <div class="hero-content">
+                                    <h1 class="display-5 fw-bold text-primary mb-3">
+                                        <i class="bi bi-building-gear me-3"></i>
+                                        Sistema de Gestión de Proyectos
+                                    </h1>
+                                    <p class="lead text-muted mb-4">
+                                        Gestiona tus obras de construcción de manera eficiente y profesional.
+                                    </p>
+                                    <div class="hero-stats">
+                                        <div class="row g-3">
+                                            <div class="col-6 col-md-3">
+                                                <div class="stat-item text-center clickable-stat" onclick="app.showSection('projects')" title="Ver todas las obras">
+                                                    <div class="stat-number text-primary fw-bold fs-2" id="totalProjects">0</div>
+                                                    <div class="stat-label text-muted">Obras Totales</div>
+                                </div>
+                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="stat-item text-center clickable-stat" onclick="app.showSection('projects', 'active')" title="Ver obras en progreso">
+                                                    <div class="stat-number text-success fw-bold fs-2" id="activeProjects">0</div>
+                                                    <div class="stat-label text-muted">En Progreso</div>
+                        </div>
+                                        </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="stat-item text-center clickable-stat" onclick="app.showSection('activities', 'pending')" title="Ver actividades pendientes">
+                                                    <div class="stat-number text-warning fw-bold fs-2" id="pendingActivities">0</div>
+                                                    <div class="stat-label text-muted">Pendientes</div>
+                                    </div>
+                                </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="stat-item text-center clickable-stat" onclick="app.showSection('files')" title="Ver todos los archivos">
+                                                    <div class="stat-number text-info fw-bold fs-2" id="totalFiles">0</div>
+                                                    <div class="stat-label text-muted">Archivos</div>
+                            </div>
+                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="hero-image-compact">
+                                    <div class="modern-illustration-compact">
+                                        <div class="floating-elements">
+                                            <div class="floating-card card-1">
+                                                <div class="card-icon">
+                                                    <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                                                <div class="card-content">
+                                                    <div class="card-number">+25%</div>
+                                                    <div class="card-label">Eficiencia</div>
+                                        </div>
+                                    </div>
+                                            <div class="floating-card card-2">
+                                                <div class="card-icon">
+                                                    <i class="bi bi-clock-history"></i>
+                                                </div>
+                                                <div class="card-content">
+                                                    <div class="card-number">-40%</div>
+                                                    <div class="card-label">Tiempo</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="central-element">
+                                            <div class="central-circle">
+                                                <div class="inner-circle">
+                                                    <i class="bi bi-building-gear"></i>
+                                                </div>
+                                                <div class="pulse-ring"></div>
+                                                <div class="pulse-ring delay-1"></div>
+                                            </div>
+                                        </div>
+                                        <div class="background-pattern">
+                                            <div class="pattern-dot dot-1"></div>
+                                            <div class="pattern-dot dot-2"></div>
+                                            <div class="pattern-dot dot-3"></div>
+                                            <div class="pattern-dot dot-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section - Larger -->
+                    <div class="charts-section-large mb-5">
+                        <div class="row g-4">
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-header bg-white border-0">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-graph-up text-primary me-2"></i>
+                                            Progreso de Obras
+                                        </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="projectProgressChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-lg-4">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-header bg-white border-0">
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-pie-chart text-success me-2"></i>
+                                            Estado de Actividades
+                                        </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="activityStatusChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions mb-5">
+                        <h3 class="mb-4">
+                            <i class="bi bi-lightning-charge text-warning me-2"></i>
+                            Acciones Rápidas
+                        </h3>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="quick-action-card" onclick="openNewProjectModal()">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                                                <i class="bi bi-building fs-4"></i>
+                                </div>
+                                            <h5 class="card-title">Nueva Obra</h5>
+                                            <p class="card-text text-muted small">Crear un nuevo proyecto de construcción</p>
+                                </div>
+                            </div>
+                        </div>
+                                </div>
+                            <div class="col-md-3">
+                                <div class="quick-action-card" onclick="openNewActivityModal()">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-success text-white rounded-circle mx-auto mb-3">
+                                                <i class="bi bi-list-task fs-4"></i>
+                                            </div>
+                                            <h5 class="card-title">Nueva Actividad</h5>
+                                            <p class="card-text text-muted small">Agregar tarea a un proyecto</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="quick-action-card" onclick="openNewClientModal()">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-info text-white rounded-circle mx-auto mb-3">
+                                                <i class="bi bi-people fs-4"></i>
+                                            </div>
+                                            <h5 class="card-title">Nuevo Cliente</h5>
+                                            <p class="card-text text-muted small">Registrar nuevo cliente</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="quick-action-card" onclick="openNewFileModal()">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="action-icon bg-warning text-white rounded-circle mx-auto mb-3">
+                                                <i class="bi bi-file-earmark-arrow-up fs-4"></i>
+                                            </div>
+                                            <h5 class="card-title">Subir Archivo</h5>
+                                            <p class="card-text text-muted small">Cargar documentos del proyecto</p>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-person-circle"></i> Mi Perfil</h2>
+                        <button type="button" class="btn btn-primary" onclick="editProfile()">
+                            <i class="bi bi-pencil"></i> Editar Perfil
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Información Personal</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Nombre:</strong> <span id="profileFirstName">-</span></p>
+                                            <p><strong>Apellido:</strong> <span id="profileLastName">-</span></p>
+                                            <p><strong>Usuario:</strong> <span id="profileUsername">-</span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Email:</strong> <span id="profileEmail">-</span></p>
+                                            <p><strong>Teléfono:</strong> <span id="profilePhone">-</span></p>
+                                            <p><strong>Rol:</strong> <span id="profileRole">-</span></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p><strong>Fecha de Registro:</strong> <span id="profileCreatedAt">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-person-circle display-1 text-muted"></i>
+                                    <h6 class="mt-2" id="profileDisplayName">Usuario</h6>
+                                    <small class="text-muted" id="profileRoleDisplay">Rol</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <div id="projects-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-building"></i> Gestión de Obras</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectModal">
+                            <i class="bi bi-plus-circle"></i> Nueva Obra
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="projectsTable">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Cliente</th>
+                                            <th>Estado</th>
+                                            <th>Progreso</th>
+                                            <th>Presupuesto</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projectsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other sections will be loaded dynamically -->
+                <!-- Activities Section -->
+                <div id="activities-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-list-task"></i> Gestión de Actividades</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">
+                            <i class="bi bi-plus-circle"></i> Nueva Actividad
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Actividad</th>
+                                            <th>Proyecto</th>
+                                            <th>Asignado a</th>
+                                            <th>Estado</th>
+                                            <th>Progreso</th>
+                                            <th>Prioridad</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="activitiesTableBody">
+                                        <!-- Activities will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clients Section -->
+                <div id="clients-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-people"></i> Gestión de Clientes</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal">
+                            <i class="bi bi-plus-circle"></i> Nuevo Cliente
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Email</th>
+                                            <th>Teléfono</th>
+                                            <th>Ciudad</th>
+                                            <th>Contacto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="clientsTableBody">
+                                        <!-- Clients will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suppliers Section -->
+                <div id="suppliers-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-truck"></i> Gestión de Proveedores</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#supplierModal">
+                            <i class="bi bi-plus-circle"></i> Nuevo Proveedor
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Proveedor</th>
+                                            <th>Tipo</th>
+                                            <th>Email</th>
+                                            <th>Teléfono</th>
+                                            <th>Ciudad</th>
+                                            <th>Contacto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="suppliersTableBody">
+                                        <!-- Suppliers will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Section -->
+                <div id="files-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-folder"></i> Gestión de Archivos</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fileUploadModal">
+                            <i class="bi bi-plus-circle"></i> Subir Archivos
+                        </button>
+                    </div>
+
+                    <!-- Filter Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <label for="fileProjectFilter" class="form-label">Filtrar por Obra:</label>
+                                    <select class="form-select" id="fileProjectFilter" onchange="filterFilesByProject()">
+                                        <option value="">Todas las obras con archivos</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-end h-100">
+                                        <button class="btn btn-outline-primary" onclick="loadFiles()">
+                                            <i class="bi bi-arrow-clockwise"></i> Actualizar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Archivo</th>
+                                            <th>Obra</th>
+                                            <th>Tipo</th>
+                                            <th>Tamaño</th>
+                                            <th>Subido por</th>
+                                            <th>Fecha</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="filesTableBody">
+                                        <!-- Files will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users-section" class="content-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-person-check"></i> Gestión de Usuarios</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">
+                            <i class="bi bi-plus-circle"></i> Nuevo Usuario
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Rol</th>
+                                            <th>Teléfono</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                        <!-- Users will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal fade" id="projectModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-building"></i> <span id="projectModalTitle">Nueva Obra</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="projectForm">
+                        <input type="hidden" id="projectId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectName" class="form-label">Nombre de la Obra *</label>
+                                    <input type="text" class="form-control" id="projectName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectClient" class="form-label">Cliente</label>
+                                    <select class="form-select" id="projectClient">
+                                        <option value="">Seleccionar cliente...</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectStartDate" class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="projectStartDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectEndDate" class="form-label">Fecha de Fin</label>
+                                    <input type="date" class="form-control" id="projectEndDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectBudget" class="form-label">Presupuesto Estimado</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="projectBudget" step="1" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectStatus" class="form-label">Estado</label>
+                                    <select class="form-select" id="projectStatus">
+                                        <option value="planning">Planificación</option>
+                                        <option value="in_progress" selected>En Progreso</option>
+                                        <option value="on_hold">En Pausa</option>
+                                        <option value="completed">Completado</option>
+                                        <option value="cancelled">Cancelado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="projectPriority" class="form-label">Prioridad</label>
+                                    <select class="form-select" id="projectPriority">
+                                        <option value="low">Baja</option>
+                                        <option value="medium" selected>Media</option>
+                                        <option value="high">Alta</option>
+                                        <option value="critical">Crítica</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectAddress" class="form-label">Dirección</label>
+                            <textarea class="form-control" id="projectAddress" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProject()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <!-- Activity Modal -->
+    <div class="modal fade" id="activityModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activityModalTitle">Nueva Actividad</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="activityForm">
+                        <input type="hidden" id="activityId" value="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityProject" class="form-label">Proyecto *</label>
+                                    <select class="form-select" id="activityProject" required>
+                                        <option value="">Seleccionar proyecto...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityName" class="form-label">Nombre de la Actividad *</label>
+                                    <input type="text" class="form-control" id="activityName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activityDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="activityDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityAssignedTo" class="form-label">Asignado a</label>
+                                    <select class="form-select" id="activityAssignedTo">
+                                        <option value="">Sin asignar</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityPriority" class="form-label">Prioridad</label>
+                                    <select class="form-select" id="activityPriority">
+                                        <option value="low">Baja</option>
+                                        <option value="medium" selected>Media</option>
+                                        <option value="high">Alta</option>
+                                        <option value="critical">Crítica</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityStartDate" class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="activityStartDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityEndDate" class="form-label">Fecha de Fin</label>
+                                    <input type="date" class="form-control" id="activityEndDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="activityEstimatedHours" class="form-label">Horas Estimadas</label>
+                                    <input type="number" class="form-control" id="activityEstimatedHours" min="0" step="0.5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activityMaterials" class="form-label">Materiales Necesarios</label>
+                            <textarea class="form-control" id="activityMaterials" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activityEquipment" class="form-label">Equipos Necesarios</label>
+                            <textarea class="form-control" id="activityEquipment" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activityNotes" class="form-label">Notas</label>
+                            <textarea class="form-control" id="activityNotes" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveActivity()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div class="modal fade" id="clientModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clientModalTitle">Nuevo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clientForm">
+                        <input type="hidden" id="clientId" value="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="clientName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientCompany" class="form-label">Empresa</label>
+                                    <input type="text" class="form-control" id="clientCompany">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="clientEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="clientPhone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clientAddress" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="clientAddress">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="clientCity" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="clientCity">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="clientState" class="form-label">Provincia</label>
+                                    <input type="text" class="form-control" id="clientState">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="clientPostalCode" class="form-label">Código Postal</label>
+                                    <input type="text" class="form-control" id="clientPostalCode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientCountry" class="form-label">País</label>
+                                    <input type="text" class="form-control" id="clientCountry" value="España">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="clientContactPerson" class="form-label">Persona de Contacto</label>
+                                    <input type="text" class="form-control" id="clientContactPerson">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clientNotes" class="form-label">Notas</label>
+                            <textarea class="form-control" id="clientNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveClient()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supplier Modal -->
+    <div class="modal fade" id="supplierModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="supplierModalTitle">Nuevo Proveedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="supplierForm">
+                        <input type="hidden" id="supplierId" value="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="supplierName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierCompany" class="form-label">Empresa</label>
+                                    <input type="text" class="form-control" id="supplierCompany">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="supplierEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="supplierPhone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierType" class="form-label">Tipo de Proveedor</label>
+                                    <select class="form-select" id="supplierType">
+                                        <option value="materials">Materiales</option>
+                                        <option value="equipment">Equipos</option>
+                                        <option value="services">Servicios</option>
+                                        <option value="labor">Mano de Obra</option>
+                                        <option value="other">Otros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierTaxId" class="form-label">NIF/CIF</label>
+                                    <input type="text" class="form-control" id="supplierTaxId">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="supplierAddress" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="supplierAddress">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="supplierCity" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="supplierCity">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="supplierState" class="form-label">Provincia</label>
+                                    <input type="text" class="form-control" id="supplierState">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="supplierPostalCode" class="form-label">Código Postal</label>
+                                    <input type="text" class="form-control" id="supplierPostalCode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierCountry" class="form-label">País</label>
+                                    <input type="text" class="form-control" id="supplierCountry" value="España">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="supplierContactPerson" class="form-label">Persona de Contacto</label>
+                                    <input type="text" class="form-control" id="supplierContactPerson">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="supplierPaymentTerms" class="form-label">Términos de Pago</label>
+                            <input type="text" class="form-control" id="supplierPaymentTerms" placeholder="Ej: 30 días">
+                        </div>
+                        <div class="mb-3">
+                            <label for="supplierNotes" class="form-label">Notas</label>
+                            <textarea class="form-control" id="supplierNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSupplier()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalTitle">Nuevo Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <input type="hidden" id="userId" value="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userFirstName" class="form-label">Nombre *</label>
+                                    <input type="text" class="form-control" id="userFirstName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userLastName" class="form-label">Apellido *</label>
+                                    <input type="text" class="form-control" id="userLastName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userUsername" class="form-label">Usuario *</label>
+                                    <input type="text" class="form-control" id="userUsername" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userEmail" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="userEmail" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userPassword" class="form-label">Contraseña <span id="passwordRequired">*</span></label>
+                                    <input type="password" class="form-control" id="userPassword">
+                                    <small class="text-muted" id="passwordHelp">Dejar vacío para mantener la contraseña actual</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" id="userPhone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="userRole" class="form-label">Rol</label>
+                                    <select class="form-select" id="userRole">
+                                        <option value="worker">Trabajador</option>
+                                        <option value="supervisor">Supervisor</option>
+                                        <option value="manager">Gerente</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="userIsActive" checked>
+                                        <label class="form-check-label" for="userIsActive">
+                                            Usuario Activo
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveUser()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <div class="modal fade" id="fileUploadModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Subir Archivos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fileUploadForm">
+                        <div class="mb-3">
+                            <label for="fileInput" class="form-label">Seleccionar Archivos *</label>
+                            <input type="file" class="form-control" id="fileInput" multiple required>
+                            <small class="text-muted">Puedes seleccionar múltiples archivos a la vez</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fileProject" class="form-label">Asociar a Obra</label>
+                            <select class="form-select" id="fileProject">
+                                <option value="">Sin obra específica</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fileDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="fileDescription" rows="3" placeholder="Descripción opcional de los archivos..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="fileIsShared">
+                                <label class="form-check-label" for="fileIsShared">
+                                    Archivos compartidos (visibles para todos los usuarios)
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="uploadFiles()">Subir Archivos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit File Modal -->
+    <div class="modal fade" id="editFileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFileModalTitle">Editar Archivo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editFileForm">
+                        <input type="hidden" id="editFileId" value="">
+                        <div class="mb-3">
+                            <label for="editFileDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="editFileDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editFileProject" class="form-label">Asociar a Obra</label>
+                            <select class="form-select" id="editFileProject">
+                                <option value="">Sin obra específica</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="editFileIsShared">
+                                <label class="form-check-label" for="editFileIsShared">
+                                    Archivo compartido (visible para todos los usuarios)
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFileChanges()">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/activities.js"></script>
+    <script src="js/clients.js"></script>
+    <script src="js/suppliers.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/files.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>
+                        <i class="bi bi-building-gear me-2"></i>
+                        Sistema de Gestión de Proyectos
+                    </h5>
+                    <p class="text-muted">
+                        Plataforma integral para la gestión eficiente de proyectos de construcción, 
+                        diseñada para optimizar procesos y mejorar la productividad.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="#"><i class="bi bi-instagram fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Módulos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" onclick="showSection('projects')">Obras</a></li>
+                        <li><a href="#" onclick="showSection('activities')">Actividades</a></li>
+                        <li><a href="#" onclick="showSection('clients')">Clientes</a></li>
+                        <li><a href="#" onclick="showSection('suppliers')">Proveedores</a></li>
+                        <li><a href="#" onclick="showSection('users')">Usuarios</a></li>
+                        <li><a href="#" onclick="showSection('files')">Archivos</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Recursos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Documentación</a></li>
+                        <li><a href="#">Tutoriales</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Soporte</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Contacto</h5>
+                    <div class="contact-info">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-geo-alt me-2"></i>
+                            <span>Av. Principal 123, Santiago, Chile</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-telephone me-2"></i>
+                            <span>+56 2 2345 6789</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-envelope me-2"></i>
+                            <span>info@sgp.cl</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock me-2"></i>
+                            <span>Lun - Vie: 8:00 - 18:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0">&copy; 2024 Sistema de Gestión de Proyectos. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Política de Privacidad</a>
+                        <a href="#" class="me-3">Términos de Uso</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
